@@ -8,7 +8,8 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
-  Share,Modal
+  Share,
+  Modal,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -48,12 +49,12 @@ const MenuScreen = () => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 2000,
+        duration: 1000,
         useNativeDriver: true,
       }),
       Animated.timing(translateYAnim, {
         toValue: 0,
-        duration: 2000,
+        duration: 1000,
         useNativeDriver: true,
       }),
       Animated.spring(scaleAnim, {
@@ -66,7 +67,6 @@ const MenuScreen = () => {
 
   const handleMenu = () => {
     setShowModal(true);
-
   };
 
   // Toggle between MenuScreen and PdfScreen
@@ -82,17 +82,17 @@ const MenuScreen = () => {
   return (
     <LinearGradient colors={["darkred", "#000000", "#ffffff"]} style={styles.background}>
       <StatusBar hidden={false} />
-
-      {/* Header Section */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleMenu}>
-          <Icons name="menu" size={25} color="skyblue" style={styles.menuIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
-        <TouchableOpacity onPress={onShare} style={styles.shareIcon}>
-          <Icons name="share-variant-outline" size={25} color="skyblue" />
-        </TouchableOpacity>
-      </View>
+      <LinearGradient colors={["darkred", "black", "lightslategrey"]} style={styles.header}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={handleMenu}>
+            <Icons name="menu" size={25} color="white" style={styles.menuIcon} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
+          <TouchableOpacity onPress={onShare} style={styles.shareIcon}>
+            <Icons name="share-variant-outline" size={25} color="white" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
       {/* Welcome Text ABOVE the Card */}
       <View style={styles.titleContainer}>
@@ -115,24 +115,36 @@ const MenuScreen = () => {
             {/* Pushes Button Lower */}
             <View style={styles.spacer} />
 
-            {/* Gradient Button */}
-            <LinearGradient colors={["darkred", "black", "gray"]} style={styles.gradientButton}>
-              <TouchableOpacity style={styles.button} onPress={toggleScreen}>
-                <Text style={styles.buttonText}>Open The Book</Text>
-              </TouchableOpacity>
-            </LinearGradient>
+            {/* Gradient Button with Animation */}
+            <Animated.View
+              style={[
+                styles.gradientButton,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
+                },
+              ]}
+            >
+              <LinearGradient colors={["darkblue", "black", "gray"]} style={styles.gradient}>
+                <TouchableOpacity style={styles.button} onPress={toggleScreen}>
+                  <Text style={styles.buttonText}>Open The Book</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </Animated.View>
           </ImageBackground>
         </View>
       </View>
+
+      {/* Modal for Menu */}
       <Modal
         visible={showModal}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
-            <Menus/>
+            <Menus />
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setShowModal(false)}
@@ -175,6 +187,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderBottomStartRadius: 25,
     borderBottomEndRadius: 25,
+    borderTopEndRadius: 25,
+    borderTopStartRadius: 25,
     top: 0,
     left: 0,
     right: 0,
@@ -191,7 +205,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "skyblue",
+    color: "white",
     textAlign: "center",
     flex: 1, // Ensures the title is centered
   },
@@ -208,7 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    color: "whitesmoke",
+    color: "skyblue",
     textShadowColor: "#8B0000",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 10,
@@ -251,14 +265,20 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 15,
   },
-  button: {
+  gradient: {
+    width: "100%",
+    borderRadius: 20,
     paddingVertical: 10,
+    alignItems: "center",
+  },
+  button: {
+    width: "100%",
     alignItems: "center",
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "skyblue",
+    color: "white",
   },
 });
 
