@@ -140,7 +140,7 @@ const PdfScreen = ({ onBack }) => {
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
             >
-              <Icons name="close" size={25} color="darkblue" />
+              <Icons name="close" size={25} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -155,8 +155,8 @@ export default PdfScreen;
 const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 5,
+    right: 5,
   },
   modalContainer: {
     flex: 1,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   container: {
     flex: 1,

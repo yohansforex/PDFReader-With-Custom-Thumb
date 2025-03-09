@@ -39,10 +39,10 @@ const Bottom = () => {
       <View style={styles.grid}>
           <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters}/>
           <Card title="Horizontal/Vertical" icon="gesture-swipe-horizontal" color="blue" onPress={()=>Alert.alert("Horizontal/Vertical Clicked")}/>
-          <Card title="Screen Orientation" icon="screen-rotation" color="blue" />
-          <Card title="Dark/Night Mode" icon="lightbulb" color={isDarkMode ? "black" : "blue"} />
+          <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={()=>Alert.alert("Screen Orientation Clicked")} />
+          <Card title="Dark/Night Mode" icon="lightbulb" color={isDarkMode ? "black" : "blue"} onPress={()=>Alert.alert("Dark/Night Mode Clicked")} />
           <Card title="Share" icon="share-variant" color="blue" onPress={handleShare} />
-          <Card title="More Apps" icon="apps" color="blue" />
+          <Card title="More Apps" icon="apps" color="blue" onPress={()=>Alert.alert("More Apps Soon...")} />
       </View>
     </LinearGradient>
   );
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
   },
   grid: {
+    marginTop: 15,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",

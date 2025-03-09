@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Alert, Share, TouchableOpacity, Image } from "r
 import LinearGradient from "react-native-linear-gradient";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 
+
 const Card = ({ title, icon, color, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -43,24 +44,24 @@ const Menus = () => {
 
       {/* Grid of Cards */}
       <View style={styles.grid}>
-        <Card title="Contact Author" icon="contacts" color="blue" />
+        <Card title="Contact Author" icon="contacts" color="blue" onPress={() => Alert.alert("Author", "Name: Ibroo Wolyyii (A.G) \n Telegram: @ibroowolyyii")}/>
         <Card
           title="About Us"
           icon="information-outline"
           color="blue"
-          onPress={() => Alert.alert("Developer", "Yohannes (Yoh)")}
+          onPress={() => Alert.alert("Developer", "Name: Yohannes (Yoh) \n Telegram: @Yon_fx")}
         />
-        <Card title="Privacy Policy" icon="shield-lock-outline" color="blue" />
+        <Card title="Privacy Policy" icon="shield-lock-outline" color="blue" onPress={() => Alert.alert("Privacy Policy", "This app does not collect any user data.")} />
         <Card title="Share" icon="share-variant" color="blue" onPress={handleShare} />
         <Card title="Rate Us" icon="star-half-full" color="blue" onPress={handleRate} />
-        <Card title="Update" icon="update" color="blue" />
+        <Card title="Update" icon="update" color="blue" onPress={() => Alert.alert("Update", "This app is up to date.")}/>
       </View>
     </LinearGradient>
   );
 };
 
 export default Menus;
-
+ 
 const styles = StyleSheet.create({
   container: {
     flex: 1,

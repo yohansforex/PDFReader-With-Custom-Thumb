@@ -149,8 +149,8 @@ const MenuScreen = () => {
 const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 3,
+    right: 3,
   },
   modalContainer: {
     flex: 1,
