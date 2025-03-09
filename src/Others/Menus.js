@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-  },
+  }, 
   coverCard: {
     borderRadius: 15,
     alignItems: "center",
