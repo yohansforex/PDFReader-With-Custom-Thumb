@@ -8,13 +8,15 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
-  Share,
+  Share,Modal
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import PdfScreen from "./PdfScreen"; // Import your PdfScreen component
+import Menus from "../Others/Menus";
 
 const MenuScreen = () => {
+  const [showModal, setShowModal] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-20)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -63,9 +65,8 @@ const MenuScreen = () => {
   }, []);
 
   const handleMenu = () => {
-    Alert.alert(
-      "Main Menu Clicked"
-    );
+    setShowModal(true);
+
   };
 
   // Toggle between MenuScreen and PdfScreen
@@ -123,11 +124,46 @@ const MenuScreen = () => {
           </ImageBackground>
         </View>
       </View>
+      <Modal
+        visible={showModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.bottomSheet}>
+            <Menus/>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowModal(false)}
+            >
+              <Icons name="close" size={25} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  bottomSheet: {
+    height: "75%", // Adjust height dynamically
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 20,
+  },
   background: {
     flex: 1,
     justifyContent: "center",

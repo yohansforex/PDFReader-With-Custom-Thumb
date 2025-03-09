@@ -25,8 +25,7 @@ const handleShare = async () => {
   }
 };
 
-const Bottom = ({ onToggleHorizontalView }) => {
-  console.log("onToggleHorizontalView received:", typeof onToggleHorizontalView);
+const Bottom = () => {
   const theme = useColorScheme();
   const isDarkMode = theme === "dark";
 
