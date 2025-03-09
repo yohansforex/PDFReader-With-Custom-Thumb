@@ -13,9 +13,11 @@
     "@react-native-assets/slider": "^7.1.1",
     "lodash": "^4.17.21",
     "react": "18.2.0",
-    "react-native": "0.73.5",
+    "react-native": "^0.73.5",
     "react-native-blob-util": "^0.19.8",
-    "react-native-pdf": "^6.7.4"
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-pdf": "^6.7.4",
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
