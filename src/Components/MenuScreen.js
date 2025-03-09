@@ -85,11 +85,11 @@ const MenuScreen = () => {
       <LinearGradient colors={["darkred", "black", "lightslategrey"]} style={styles.header}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleMenu}>
-            <Icons name="menu" size={25} color="white" style={styles.menuIcon} />
+            <Icons name="menu" size={20} color="white" style={styles.menuIcon} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
           <TouchableOpacity onPress={onShare} style={styles.shareIcon}>
-            <Icons name="share-variant-outline" size={25} color="white" />
+            <Icons name="share-variant-outline" size={20} color="white" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
