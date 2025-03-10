@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Alert, StatusBar, Modal } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Pdf from 'react-native-pdf';
 import { Slider } from '@react-native-assets/slider';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,6 +14,9 @@ const PdfScreen = ({ onBack }) => {
   const [isStatusBarHidden, setStatusBarHidden] = React.useState(false);
   const [isHeaderFooterVisible, setHeaderFooterVisible] = React.useState(true);
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const [isSliderVisible, setSliderVisible] = React.useState(true); // State to control slider visibility
+
+  // Function to reset the inactivity timer
 
   const handlePageSearch = () => {
     const pageNumber = parseInt(inputPage, 10);
@@ -40,16 +43,17 @@ const PdfScreen = ({ onBack }) => {
       </View>
     );
   };
+  
 
   const handleSingleTap = () => {
     setStatusBarHidden((prev) => !prev);
     setHeaderFooterVisible((prev) => !prev);
   };
-
-  const onValueChange = (value) => {
-    pdfRef.current?.setPage(value);
-    setCurrentPage(value);
+  const handleChapterPress = (pageNumber) => {
+    pdfRef.current?.setPage(pageNumber);
+    setCurrentPage(pageNumber);
   };
+
 
   const handlePdfMenu = () => {
     setModalVisible(true);
@@ -98,21 +102,22 @@ const PdfScreen = ({ onBack }) => {
           style={styles.pdf}
           onPageSingleTap={handleSingleTap}
         />
-        <View style={styles.verticalSliderContainer}>
-          <Slider
-            value={currentPage}
-            minimumValue={1}
-            maximumValue={544}
-            step={1}
-            minimumTrackTintColor="black"
-            maximumTrackTintColor="darkred"
-            vertical={true}
-            slideOnTap={true}
-            onValueChange={onValueChange}
-            onSlidingComplete={onSlidingComplete}
-            CustomThumb={CustomThumb}
-          />
-        </View>
+        {isSliderVisible && ( // Conditionally render the slider
+          <View style={styles.verticalSliderContainer}>
+            <Slider
+              value={currentPage}
+              minimumValue={1}
+              maximumValue={544}
+              step={1}
+              minimumTrackTintColor="black"
+              maximumTrackTintColor="darkred"
+              vertical={true}
+              slideOnTap={true}
+              onSlidingComplete={onSlidingComplete}
+              CustomThumb={CustomThumb}
+            />
+          </View>
+        )}
       </View>
 
       {isHeaderFooterVisible && (
@@ -135,7 +140,7 @@ const PdfScreen = ({ onBack }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
-            <Bottom />
+            <Bottom onChapterPress={handleChapterPress}/>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
@@ -151,7 +156,7 @@ const PdfScreen = ({ onBack }) => {
 
 export default PdfScreen;
 
-// Styles
+
 const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
