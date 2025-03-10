@@ -8,17 +8,31 @@ const Chapter = ({ onChapterPress }) => {
     onChapterPress(pageNumber);
   };
 
-  // Example mapping: Chapter 1 → Page 20, Chapter 2 → Page 40, etc.
+  // Correct page mapping for each chapter
   const getPageNumberForChapter = (chapterNumber) => {
-    return chapterNumber * 20;
+    const chapterPages = {
+      1: 48,
+      2: 81,
+      3: 188,
+      4: 277,
+      5: 286,
+      6: 363,
+      7: 390,
+      8: 439,
+      9: 483,
+      10: 533,
+    };
+
+    return chapterPages[chapterNumber] || 1; // Default to page 1 if chapter not found
   };
 
   return (
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>   
       <Text style={styles.title}>Select a Chapter</Text>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {[...Array(10).keys()].map((_, index) => { // Creates 20 chapters
+        {[...Array(10).keys()].map((_, index) => { 
           const chapter = index + 1;
+
           return (
             <TouchableOpacity
               key={chapter}

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import Chapter from "./Chapter"; // Ensure the name matches the export
+import Chapter from "./Chapter";
 
-const Bottom = () => {
+const Bottom = ({ onChapterPress, onClose }) => {
   const [isChapterModalVisible, setChapterModalVisible] = useState(false);
 
   const handleChapters = () => {
@@ -12,8 +12,9 @@ const Bottom = () => {
   };
 
   const handleChapterSelect = (pageNumber) => {
-    setChapterModalVisible(false); // Close the modal
-    Alert.alert(`Chapter Selected`, `Navigating to page ${pageNumber}`); // Display alert
+    setChapterModalVisible(false); // Close chapter modal
+    onChapterPress(pageNumber); // Navigate to selected page
+    onClose(); // Close Bottom modal as well
   };
 
   const Card = ({ title, icon, color, onPress }) => (
@@ -27,14 +28,14 @@ const Bottom = () => {
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>
       <View style={styles.grid}>
         <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters} />
-        <Card title="Horizontal/Vertical" icon="gesture-swipe-horizontal" color="blue" onPress={() => Alert.alert("Horizontal/Vertical Clicked")} />
-        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={() => Alert.alert("Screen Orientation Clicked")} />
-        <Card title="Dark/Night Mode" icon="lightbulb" color="yellow" onPress={() => Alert.alert("Dark/Night Mode Clicked")} />
-        <Card title="Share" icon="share-variant" color="blue" onPress={() => Alert.alert("Share Clicked")} />
-        <Card title="More Apps" icon="apps" color="blue" onPress={() => Alert.alert("More Apps Soon...")} />
+        <Card title="Horizontal/Vertical" icon="gesture-swipe-horizontal" color="blue" onPress={() => {}} />
+        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={() => {}} />
+        <Card title="Dark/Night Mode" icon="lightbulb" color="yellow" onPress={() => {}} />
+        <Card title="Share" icon="share-variant" color="blue" onPress={() => {}} />
+        <Card title="More Apps" icon="apps" color="blue" onPress={() => {}} />
       </View>
 
-      {/* Modal for Chapters */}
+      {/* Chapter Selection Modal */}
       <Modal
         visible={isChapterModalVisible}
         animationType="slide"
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "30%",
-    height: 70,
+    height: 80,
     backgroundColor: "white",
     borderRadius: 8,
     alignItems: "center",
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   bottomSheet: {
-    height: "40%", // Adjust height dynamically
+    height: "40%",
     backgroundColor: "darkred",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

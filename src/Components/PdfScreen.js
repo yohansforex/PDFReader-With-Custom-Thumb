@@ -14,8 +14,7 @@ const PdfScreen = ({ onBack }) => {
   const [isStatusBarHidden, setStatusBarHidden] = React.useState(false);
   const [isHeaderFooterVisible, setHeaderFooterVisible] = React.useState(true);
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const [isSliderVisible, setSliderVisible] = React.useState(true); // State to control slider visibility
-
+  const [isHLScroll, setIsHLScroll] = React.useState(false);
   // Function to reset the inactivity timer
 
   const handlePageSearch = () => {
@@ -54,6 +53,9 @@ const PdfScreen = ({ onBack }) => {
     setCurrentPage(pageNumber);
   };
 
+  const handleHorizontalScroll = () => {
+    setIsHLScroll((prev) => !prev);
+  };
 
   const handlePdfMenu = () => {
     setModalVisible(true);
@@ -100,9 +102,9 @@ const PdfScreen = ({ onBack }) => {
           }}
           onError={(error) => console.log(error)}
           style={styles.pdf}
+          horizontal={isHLScroll}
           onPageSingleTap={handleSingleTap}
         />
-        {isSliderVisible && ( // Conditionally render the slider
           <View style={styles.verticalSliderContainer}>
             <Slider
               value={currentPage}
@@ -117,7 +119,6 @@ const PdfScreen = ({ onBack }) => {
               CustomThumb={CustomThumb}
             />
           </View>
-        )}
       </View>
 
       {isHeaderFooterVisible && (
@@ -140,7 +141,7 @@ const PdfScreen = ({ onBack }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
-            <Bottom onChapterPress={handleChapterPress}/>
+            <Bottom onChapterPress={handleChapterPress} onClose={() => setModalVisible(false)}/>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
