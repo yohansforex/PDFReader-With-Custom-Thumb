@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Chapter from "./Chapter";
 
-const Bottom = ({ onChapterPress, onClose }) => {
+const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
   const [isChapterModalVisible, setChapterModalVisible] = useState(false);
 
   const handleChapters = () => {
@@ -15,6 +15,10 @@ const Bottom = ({ onChapterPress, onClose }) => {
     setChapterModalVisible(false); // Close chapter modal
     onChapterPress(pageNumber); // Navigate to selected page
     onClose(); // Close Bottom modal as well
+  };
+  const HorizontalScroll = () => {
+    onToggleScroll();
+    onClose();
   };
 
   const Card = ({ title, icon, color, onPress }) => (
@@ -28,8 +32,8 @@ const Bottom = ({ onChapterPress, onClose }) => {
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>
       <View style={styles.grid}>
         <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters} />
-        <Card title="Horizontal/Vertical" icon="gesture-swipe-horizontal" color="blue" onPress={() => {}} />
-        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={() => {}} />
+        <Card title="Horizontal/Vertical Scroll" icon="gesture-swipe-horizontal" color="blue" onPress={HorizontalScroll} />
+        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={() => Alert.alert("Screen Orientation", "This feature is not available in this app.")} />
         <Card title="Dark/Night Mode" icon="lightbulb" color="yellow" onPress={() => {}} />
         <Card title="Share" icon="share-variant" color="blue" onPress={() => {}} />
         <Card title="More Apps" icon="apps" color="blue" onPress={() => {}} />

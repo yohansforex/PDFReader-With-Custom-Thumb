@@ -141,7 +141,7 @@ const PdfScreen = ({ onBack }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
-            <Bottom onChapterPress={handleChapterPress} onClose={() => setModalVisible(false)}/>
+            <Bottom onChapterPress={handleChapterPress} onClose={() => setModalVisible(false)} onToggleScroll={handleHorizontalScroll}/>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
