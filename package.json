@@ -16,6 +16,7 @@
     "react-native": "^0.73.5",
     "react-native-blob-util": "^0.19.8",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-orientation-locker": "^1.7.0",
     "react-native-pdf": "^6.7.4",
     "react-native-vector-icons": "^10.2.0"
   },

@@ -114,7 +114,6 @@ const PdfScreen = ({ onBack }) => {
               minimumTrackTintColor="black"
               maximumTrackTintColor="darkred"
               vertical={true}
-              slideOnTap={true}
               onSlidingComplete={onSlidingComplete}
               CustomThumb={CustomThumb}
             />
@@ -186,6 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomLeftRadius: 25,
     borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
   headerContent: {
     flexDirection: 'row',
@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchInput: {
+    borderColor: 'white',
     height: 30,
     width: 70,
     padding: 5,
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 40,
     backgroundColor: 'white',
-    padding: 15,
+    padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -248,8 +249,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   footerGradient: {
-    borderTopRightRadius: 15,
-    borderBottomLeftRadius: 15,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
     width: "100%",
     height: 40,
     justifyContent: "center",

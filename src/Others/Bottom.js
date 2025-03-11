@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Share } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Chapter from "./Chapter";
+import Orientation from "react-native-orientation-locker";
 
 const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
   const [isChapterModalVisible, setChapterModalVisible] = useState(false);
+
+  // Toggle between portrait and landscape
+  const handleOrientation = () => {
+    Orientation.getOrientation((orientation) => {
+      if (orientation === "PORTRAIT") {
+        Orientation.lockToLandscape();
+      } else {
+        Orientation.lockToPortrait();
+      }
+    });
+    onClose();
+  };
 
   const handleChapters = () => {
     setChapterModalVisible(true); // Show the Chapters modal
@@ -16,6 +29,7 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
     onChapterPress(pageNumber); // Navigate to selected page
     onClose(); // Close Bottom modal as well
   };
+
   const HorizontalScroll = () => {
     onToggleScroll();
     onClose();
@@ -33,9 +47,9 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
       <View style={styles.grid}>
         <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters} />
         <Card title="Horizontal/Vertical Scroll" icon="gesture-swipe-horizontal" color="blue" onPress={HorizontalScroll} />
-        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={() => Alert.alert("Screen Orientation", "This feature is not available in this app.")} />
+        <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={handleOrientation} />
         <Card title="Dark/Night Mode" icon="lightbulb" color="yellow" onPress={() => {}} />
-        <Card title="Share" icon="share-variant" color="blue" onPress={() => {}} />
+        <Card title="Share" icon="share-variant" color="blue" onPress={() => { Share.share({ message: "Share Handhuuraa Ormoo Arsi" }); }} />
         <Card title="More Apps" icon="apps" color="blue" onPress={() => {}} />
       </View>
 

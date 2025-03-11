@@ -1,8 +1,16 @@
 import React from "react";
-import { StyleSheet, View, Text, Alert, Share, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  Share,
+  TouchableOpacity,
+  Image,
+  Linking,
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-
 
 const Card = ({ title, icon, color, onPress }) => {
   return (
@@ -27,6 +35,20 @@ const handleRate = () => {
   Alert.alert("Rate Us", "Thank you for rating us!");
 };
 
+const handleEmail = () => {
+  const email = "Ebroseta50@gmail.com";
+  Linking.openURL(`mailto:${email}`).catch(() =>
+    Alert.alert("Error", "Unable to open email client.")
+  );
+};
+
+const handlePhoneCall = () => {
+  const phoneNumber = "+16515002991";
+  Linking.openURL(`tel:${phoneNumber}`).catch(() =>
+    Alert.alert("Error", "Unable to open phone dialer.")
+  );
+};
+
 const Menus = () => {
   return (
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>
@@ -39,36 +61,60 @@ const Menus = () => {
         />
         <Text style={styles.bookTitle}>Handhuuraa Oromo Arsi</Text>
         <Text style={styles.bookSubTitle}>Barressan: Ibroo Wolyyii (A.G)</Text>
-
       </View>
 
       {/* Grid of Cards */}
       <View style={styles.grid}>
-        <Card title="Contact Author" icon="contacts" color="blue" onPress={() => Alert.alert("Author", "Name: Ibroo Wolyyii (A.G) \n Telegram: @ibroowolyyii")}/>
+        <Card
+          title="Contact Author"
+          icon="contacts"
+          color="blue"
+          onPress={() =>
+            Alert.alert(
+              "Contact Information",
+              `Barressan: Ibroo Woliyyii (A.G)\nMinosootaa (USA)\n✉️ Email: Ebroseta50@gmail.com\n📞 Phone: +16515002991`,
+              [
+                { text: "Send Email", onPress: handleEmail },
+                { text: "Make Phone Call", onPress: handlePhoneCall },
+                { text: "Cancel", style: "cancel" },
+              ]
+            )
+          }
+        />
         <Card
           title="About Us"
           icon="information-outline"
           color="blue"
           onPress={() => Alert.alert("Developer", "Name: Yohannes (Yoh) \n Telegram: @Yon_fx")}
         />
-        <Card title="Privacy Policy" icon="shield-lock-outline" color="blue" onPress={() => Alert.alert("Privacy Policy", "This app does not collect any user data.")} />
+        <Card
+          title="Privacy Policy"
+          icon="shield-lock-outline"
+          color="blue"
+          onPress={() => Alert.alert("Privacy Policy", "This app does not collect any user data.")}
+        />
         <Card title="Share" icon="share-variant" color="blue" onPress={handleShare} />
         <Card title="Rate Us" icon="star-half-full" color="blue" onPress={handleRate} />
-        <Card title="Update" icon="update" color="blue" onPress={() => Alert.alert("Update", "This app is up to date.")}/>
+        <Card
+          title="Update"
+          icon="update"
+          color="blue"
+          onPress={() => Alert.alert("Update", "This app is up to date.")}
+        />
       </View>
     </LinearGradient>
   );
 };
 
 export default Menus;
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-  }, 
+  },
   coverCard: {
     borderRadius: 15,
     alignItems: "center",

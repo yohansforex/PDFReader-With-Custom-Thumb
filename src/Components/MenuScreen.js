@@ -117,6 +117,8 @@ const MenuScreen = () => {
       borderBottomEndRadius: 25,
       borderTopEndRadius: 25,
       borderTopStartRadius: 25,
+      borderTopLeftRadius: 25,
+      borderTopRightRadius: 25,
       top: 0,
       left: 0,
       right: 0,
@@ -231,7 +233,7 @@ const MenuScreen = () => {
         <Animated.Text
           style={[styles.animatedTitle, { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }]}
         >
-          Welcome to Historical Oromo People Arsi
+          Welcome to Seenaa Oromoo Uummata Arsii
         </Animated.Text>
       </View>
 
@@ -279,7 +281,7 @@ const MenuScreen = () => {
               style={styles.closeButton}
               onPress={() => setShowModal(false)}
             >
-              <Icons name="close" size={25} color={colorScheme === "dark" ? "#FFFFFF" : "#000000"} />
+              <Icons name="close" size={25} color="#FFFFFF"/>
             </TouchableOpacity>
           </View>
         </View>

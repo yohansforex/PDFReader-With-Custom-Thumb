@@ -20,7 +20,7 @@ const SplashScreen = ({ onFinish }) => {
     >
       <StatusBar hidden />
       <View style={styles.overlay}>
-        <Text style={styles.title}>Welcome to Historical Oromo People Arsi</Text>
+        <Text style={styles.title}>Welcome to Seenaa Oromoo Uummata Arsii </Text>
       </View>
     </ImageBackground>
   );

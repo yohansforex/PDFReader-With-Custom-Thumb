@@ -28,7 +28,7 @@ const Chapter = ({ onChapterPress }) => {
 
   return (
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>   
-      <Text style={styles.title}>Select a Chapter</Text>
+      <Text style={styles.title}>Boqonnaa filadhu</Text>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {[...Array(10).keys()].map((_, index) => { 
           const chapter = index + 1;
@@ -39,7 +39,7 @@ const Chapter = ({ onChapterPress }) => {
               style={styles.chapterButton}
               onPress={() => handleChapterPress(chapter)}
             >
-              <Text style={styles.chapterButtonText}>Chapter {chapter}</Text>
+              <Text style={styles.chapterButtonText}>Boqonna {chapter}</Text>
             </TouchableOpacity>
           );
         })}
