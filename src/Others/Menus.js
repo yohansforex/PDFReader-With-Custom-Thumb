@@ -61,6 +61,7 @@ const Menus = () => {
         />
         <Text style={styles.bookTitle}>Handhuuraa Oromo Arsi</Text>
         <Text style={styles.bookSubTitle}>Barressan: Ibroo Wolyyii (A.G)</Text>
+        <Text style={styles.bookSubTitle2}>Developer: Yohannes (Yoh)</Text>
       </View>
 
       {/* Grid of Cards */}
@@ -75,7 +76,7 @@ const Menus = () => {
               `Barressan: Ibroo Woliyyii (A.G)\nMinosootaa (USA)\n✉️ Email: Ebroseta50@gmail.com\n📞 Phone: +16515002991`,
               [
                 { text: "Send Email", onPress: handleEmail },
-                { text: "Make Phone Call", onPress: handlePhoneCall },
+                { text: "Make Call", onPress: handlePhoneCall },
                 { text: "Cancel", style: "cancel" },
               ]
             )
@@ -140,6 +141,11 @@ const styles = StyleSheet.create({
   },
   bookSubTitle: {
     fontSize: 15,
+    color: "white",
+    marginTop: 3,
+    textAlign: "center",
+  },  bookSubTitle2: {
+    fontSize: 13,
     color: "white",
     marginTop: 5,
     textAlign: "center",

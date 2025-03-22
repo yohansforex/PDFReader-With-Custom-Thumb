@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Share } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Share, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Chapter from "./Chapter";
 import Orientation from "react-native-orientation-locker";
@@ -48,9 +48,9 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
         <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters} />
         <Card title="Horizontal/Vertical Scroll" icon="gesture-swipe-horizontal" color="blue" onPress={HorizontalScroll} />
         <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={handleOrientation} />
-        <Card title="Dark/Night Mode" icon="lightbulb" color="yellow" onPress={() => {}} />
+        <Card title="Author Other Books" icon="book" color="blue" onPress={() => {Alert.alert("Author Other Books", "Coming Soon...")}} />
         <Card title="Share" icon="share-variant" color="blue" onPress={() => { Share.share({ message: "Share Handhuuraa Ormoo Arsi" }); }} />
-        <Card title="More Apps" icon="apps" color="blue" onPress={() => {}} />
+        <Card title="More Apps" icon="apps" color="blue" onPress={() => {Alert.alert("More Apps", "Coming Soon...")}} />
       </View>
 
       {/* Chapter Selection Modal */}

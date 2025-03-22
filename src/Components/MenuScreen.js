@@ -97,7 +97,7 @@ const MenuScreen = () => {
       backgroundColor: colorScheme === "dark" ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.5)",
     },
     bottomSheet: {
-      height: "70%", // Adjust height dynamically
+      height: "73%", // Adjust height dynamically
       backgroundColor: colorScheme === "dark" ? "#121212" : "white",
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
@@ -239,6 +239,34 @@ const MenuScreen = () => {
 
       {/* Card View Below the Welcome Text */}
       <View style={styles.overlay}>
+        <View style={styles.card}>
+          <ImageBackground
+            source={require("../../cover.jpg")}
+            style={styles.cardBackground}
+            resizeMode="cover"
+            imageStyle={{ borderRadius: 20 }}
+          >
+            {/* Pushes Button Lower */}
+            <View style={styles.spacer} />
+
+            {/* Gradient Button with Animation */}
+            <Animated.View
+              style={[
+                styles.gradientButton,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
+                },
+              ]}
+            >
+              <LinearGradient colors={["blue", "black", "gray"]} style={styles.gradient}>
+                <TouchableOpacity style={styles.button} onPress={toggleScreen}>
+                  <Text style={styles.buttonText}>Open The Book</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </Animated.View>
+          </ImageBackground>
+        </View>
         <View style={styles.card}>
           <ImageBackground
             source={require("../../cover.jpg")}
