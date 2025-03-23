@@ -21,6 +21,8 @@ import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import PdfScreen from "./PdfScreen"; // Import your PdfScreen component
 import Menus from "../Others/Menus";
 import Note from "./Note";
+import Quotes from "./Quotes";
+import { BlurView } from "@react-native-community/blur";
 
 const { width } = Dimensions.get("window");
 
@@ -32,7 +34,7 @@ const MenuScreen = () => {
   const translateYAnim = useRef(new Animated.Value(-20)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const colorScheme = useColorScheme();
-
+  const [setQoute, setSetQoute] = useState(false);
   // Share function
   const onShare = async () => {
     try {
@@ -86,7 +88,13 @@ const MenuScreen = () => {
   const handleNote = () => {
     setIsNoteVisible((prev) => !prev);
   };
+  const handleQotes = () => {
+    setSetQoute(!setQoute);
+  };
 
+  if(setQoute){
+    return <Quotes onBack={handleQotes} />
+  }
   if (isNoteVisible) {
     return <Note onBack={handleNote} />;
   }
@@ -99,60 +107,51 @@ const MenuScreen = () => {
   const cards = [
     {
       id: "1",
-      title: "Read The Book",
-      image: require("../../cover.jpg"),
+      title: "Open The Book",
+      icon: "book-open-page-variant",
       onPress: toggleScreen,
     },
     {
       id: "2",
       title: "Add & Read Notes",
-      image: require("../../notes.jpeg"),
+      icon: "pen", // Replacing image with icon
       onPress: handleNote,
     },
     {
       id: "3",
-      title: "Favorites Qoutes",
-      image: require("../../favorite.png"),
-      onPress: () => Alert.alert("Favorites", "Favorites feature coming soon!"),
+      title: "Book Quotes",
+      icon: "heart-outline", // Replacing image with icon
+      onPress: handleQotes,
     },
     {
       id: "4",
       title: "Settings",
-      image: require("../../setting.png"),
-      onPress: () => setShowModal(true), // Open the modal
+      icon: "cog-outline", // Replacing image with icon
+      onPress: () => setShowModal(true),
     },
   ];
 
+
+
   // Render each card
   const renderCard = ({ item }) => (
-    <TouchableOpacity onPress={item.onPress}>
-      <View style={styles.card}>
-        <ImageBackground
-          source={item.image}
-          style={styles.cardBackground}
-          resizeMode="cover"
-          imageStyle={{ borderRadius: 20 }}
-        >
-          <View style={styles.spacer} />
-          <Animated.View
-            style={[
-              styles.gradientButton,
-              {
-                opacity: fadeAnim,
-                transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
-              },
-            ]}
-          >
-            <LinearGradient colors={["blue", "black", "gray"]} style={styles.gradient}>
-              <Text style={styles.buttonText}>{item.title}</Text>
-            </LinearGradient>
-          </Animated.View>
-        </ImageBackground>
-      </View>
+    <TouchableOpacity onPress={item.onPress} style={styles.card}>
+        <View style={[styles.cardBackground, { justifyContent: "center", alignItems: "center" }]}>
+          <Icons name={item.icon} size={50} color="black" />
+          <Text style={styles.iconText}>{item.title}</Text>
+        </View>
     </TouchableOpacity>
   );
 
   const styles = StyleSheet.create({
+    iconText: {
+      marginTop: 10,
+      fontSize: 14,
+      fontWeight: "bold",
+      color: "midnightblue",
+      textAlign: "center",
+
+    },
     closeButton: {
       position: "absolute",
       top: 3,
@@ -193,11 +192,8 @@ const MenuScreen = () => {
     headerTitle: {
       fontSize: 20,
       fontWeight: "bold",
-      color: "#FFFFFF",
+      color: "linen",
       textAlign: "center",
-      textShadowOffset: { width: 3, height: 3 },
-      textShadowRadius: 15,
-      textShadowColor: "black",
     },
     shareIcon: {
       marginRight: 10,
@@ -212,10 +208,7 @@ const MenuScreen = () => {
       fontSize: 20,
       fontWeight: "bold",
       textAlign: "center",
-      color: colorScheme === "dark" ? "#FFFFFF" : "white",
-      textShadowColor: colorScheme === "dark" ? "#000000" : "#8B0000",
-      textShadowOffset: { width: 3, height: 3 },
-      textShadowRadius: 10,
+      color: "linen",
     },
     overlay: {
       flex: 1,
@@ -229,12 +222,10 @@ const MenuScreen = () => {
       height: 200,
       borderRadius: 20,
       overflow: "hidden",
-      shadowColor: "#000",
+      shadowColor: "white",
       shadowOpacity: 0.3,
-      shadowOffset: { width: 0, height: 2 },
       shadowRadius: 4,
       elevation: 5,
-      backgroundColor: colorScheme === "dark" ? "#333333" : "#FFFFFF",
       margin: 10,
     },
     cardBackground: {
@@ -242,31 +233,31 @@ const MenuScreen = () => {
       justifyContent: "flex-start",
       alignItems: "center",
       padding: 20,
+      backgroundColor: "rgba(255, 255, 255, 0.42)",
+
     },
     spacer: {
       flex: 1,
     },
     gradientButton: {
-      width: "90%",
+      width: "100%",
       borderRadius: 20,
-      overflow: "hidden",
       shadowColor: "#000",
-      shadowOpacity: 0.3,
-      shadowOffset: { width: 0, height: 2 },
-      shadowRadius: 4,
-      elevation: 5,
       marginBottom: 15,
+      backgroundColor: "slateblue",
+      marginBottom: 5,
     },
     gradient: {
       width: "100%",
       borderRadius: 20,
       paddingVertical: 10,
       alignItems: "center",
+      backgroundColor: "rgba(255, 255, 255, 0.04)",
     },
     buttonText: {
-      fontSize: 10,
+      fontSize: 13,
       fontWeight: "bold",
-      color: "white",
+      color: "black",
     },
     cardList: {
       flex: 1,
@@ -276,55 +267,65 @@ const MenuScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <LinearGradient colors={["navy","darkblue","blue","mediumblue", "dodgerblue", "cornflowerblue"]} style={styles.background}>
-        <StatusBar hidden={false} />
-        {/* Header */}
-        <View style={styles.header}>
-        <TouchableOpacity onPress={handleMenu} activeOpacity={0.7} style={styles.menuIcon}>
-          <Icons name="menu" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-          <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
-        <TouchableOpacity onPress={onShare} activeOpacity={0.7} style={styles.shareIcon}>
-          <Icons name="share-variant-outline" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        </View>
-
-        {/* Title Section */}
-        <View style={styles.titleContainer}>
-          <Animated.Text
-            style={[styles.animatedTitle, { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }]}
+      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      <ImageBackground
+        source={require("../../lasst.png")}
+        style={styles.background}
+        resizeMode="cover"
+      >
+      {/* <BlurView
+        style={StyleSheet.absoluteFill}
+        blurType="transparent" // Change to "dark" if needed
+        blurAmount={1} // Adjust blur intensity
+        reducedTransparencyFallbackColor="rgba(255, 255, 255, 0.5)"
+      /> */}
+        <View style={styles.background}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleMenu} activeOpacity={0.7} style={styles.menuIcon}>
+              <Icons name="menu" size={24} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
+            <TouchableOpacity onPress={onShare} activeOpacity={0.7} style={styles.shareIcon}>
+              <Icons name="share-variant-outline" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+  
+          {/* Title Section */}
+          <View style={styles.titleContainer}>
+            <Animated.Text
+              style={[styles.animatedTitle, { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }]}
+            >
+              Welcome to Seenaa Oromoo Uummata Arsii
+            </Animated.Text>
+          </View>
+  
+          {/* Card List */}
+          <FlatList
+            data={cards}
+            renderItem={renderCard}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            contentContainerStyle={styles.cardList}
+          />
+  
+          {/* Modal */}
+          <Modal
+            visible={showModal}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={() => setShowModal(false)}
           >
-            Welcome to Seenaa Oromoo Uummata Arsii
-          </Animated.Text>
-        </View>
-
-        {/* Card List */}
-        <FlatList
-          data={cards}
-          renderItem={renderCard}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          contentContainerStyle={styles.cardList}
-        />
-
-        {/* Modal */}
-        <Modal
-          visible={showModal}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => setShowModal(false)}
-        >
-          <TouchableWithoutFeedback onPress={() => setShowModal(false)}>
-            <View style={styles.modalContainer}>
-              <View style={styles.bottomSheet}>
-                <Menus />
+            <TouchableWithoutFeedback onPress={() => setShowModal(false)}>
+              <View style={styles.modalContainer}>
+                <View style={styles.bottomSheet}>
+                  <Menus />
+                </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      </LinearGradient>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </View>
+      </ImageBackground>
     </View>
-  );
-};
-
+    )}
 export default MenuScreen;

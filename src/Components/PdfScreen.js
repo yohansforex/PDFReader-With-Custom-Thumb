@@ -70,11 +70,11 @@ const PdfScreen = ({ onBack }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar hidden={isStatusBarHidden} />
 
       {isHeaderFooterVisible && (
-        <LinearGradient colors={["darkred", "black", "slategray"]} style={styles.header}>
+        <LinearGradient colors={["dodgerblue", "blue", "navy"]} style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity style={styles.backButton} onPress={() => onBack()}>
               <Icons name="keyboard-backspace" size={24} color="white" />
@@ -129,7 +129,7 @@ const PdfScreen = ({ onBack }) => {
       </View>
 
       {isHeaderFooterVisible && (
-        <LinearGradient colors={["darkred", "black", "slategray"]} style={styles.footerGradient}>
+        <LinearGradient colors={["dodgerblue", "blue", "navy"]} style={styles.footerGradient}>
           <View style={styles.footerContent}>
             <Text style={styles.footerText}>{`Page ${currentPage}/544`}</Text>
             <TouchableOpacity onPress={handlePdfMenu}>
@@ -182,13 +182,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 10,
+    backgroundColor: 'white',
   },
   header: {
     height: 50,
     justifyContent: 'center',
-    borderBottomLeftRadius: 25,
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
   },
   headerContent: {
     flexDirection: 'row',

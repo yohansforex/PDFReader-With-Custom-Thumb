@@ -123,7 +123,7 @@ const Note = ({ onBack }) => {
       <StatusBar />
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={onBack}>
-          <Icons name="keyboard-backspace" size={24} color="white" />
+          <Icons name="keyboard-backspace" size={24} color="skyblue" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Add Notes</Text>
         <View style={styles.searchContainer}>
@@ -132,10 +132,10 @@ const Note = ({ onBack }) => {
             value={searchText}
             onChangeText={setSearchText}
             style={styles.searchInput}
-            placeholderTextColor={"white"}
+            placeholderTextColor={"skyblue"}
           />
           <TouchableOpacity style={styles.searchButton}>
-            <Icons name="magnify" size={24} color="white" />
+            <Icons name="magnify" size={24} color="skyblue" />
           </TouchableOpacity>
         </View>
       </View>
@@ -225,7 +225,7 @@ const Note = ({ onBack }) => {
 
 const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", backgroundColor: "rebeccapurple", padding: 10, borderRadius: 20, height: 50 },
-  headerTitle: { fontSize: 18, fontWeight: "bold", color: "white", flex: 1, textAlign: "center" },
+  headerTitle: { fontSize: 18, fontWeight: "bold", color: "skyblue", flex: 1, textAlign: "center" },
   searchContainer: { flexDirection: "row", alignItems: "center" },
   searchInput: { backgroundColor: "rebeccapurple", borderRadius: 10, height: 35, color: "white", paddingHorizontal: 10, marginTop: 5 },
   notesContainer: { padding: 10 },

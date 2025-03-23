@@ -1,26 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, StatusBar } from "react-native";
 
 const SplashScreen = ({ onFinish }) => {
-  useEffect(() => {
-    // Set a timeout to call the onFinish callback after 3 seconds
-    const timer = setTimeout(() => {
-      onFinish(); // Call the callback function
-    }, 3000);
+  const fullText = "Welcome to Seenaa Oromoo Uummata Arsii"; // The full text to type
+  const [displayedText, setDisplayedText] = useState(""); // State to hold the typed text
+  const typingSpeed = 200; // Typing speed in milliseconds
 
-    // Cleanup the timer when the component unmounts
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    let index = 0;
+
+    const interval = setInterval(() => {
+      if (index < fullText.length) {
+        setDisplayedText((prev) => prev + fullText[index]); // Add one letter at a time
+        index++;
+      } else {
+        clearInterval(interval); // Stop when all letters are displayed
+        setTimeout(() => {
+          onFinish(); // Move to the next screen after a delay
+        }, 1000);
+      }
+    }, typingSpeed);
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
   }, [onFinish]);
 
   return (
     <ImageBackground
-      source={require("../../coverpage.jpg")} // Ensure the image exists
+      source={require("../../splash.jpg")} // Ensure this image exists in the correct path
       style={styles.background}
       resizeMode="cover"
     >
       <StatusBar hidden />
       <View style={styles.overlay}>
-        <Text style={styles.title}>Welcome to Seenaa Oromoo Uummata Arsii </Text>
+        <Text style={styles.title}>{displayedText}</Text>
       </View>
     </ImageBackground>
   );

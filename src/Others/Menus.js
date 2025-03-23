@@ -32,7 +32,9 @@ const handleShare = async () => {
 };
 
 const handleRate = () => {
-  Alert.alert("Rate Us", "Thank you for rating us!");
+  Linking.openURL("https://play.google.com/store/apps/details?id=com.custompdfreader&hl=en").catch(() =>
+    Alert.alert("Error", "Unable to open Google Play Store.")
+  );
 };
 
 const handleEmail = () => {
@@ -92,7 +94,7 @@ const Menus = () => {
           title="Privacy Policy"
           icon="shield-lock-outline"
           color="blue"
-          onPress={() => Alert.alert("Privacy Policy", "This app does not collect any user data.")}
+          onPress={() => Linking.openURL("https://www.termsfeed.com/live/3feeb2d3-8b6c-47f1-a4e6-6d462e443d52")}
         />
         <Card title="Share" icon="share-variant" color="blue" onPress={handleShare} />
         <Card title="Rate Us" icon="star-half-full" color="blue" onPress={handleRate} />
@@ -100,7 +102,9 @@ const Menus = () => {
           title="Update"
           icon="update"
           color="blue"
-          onPress={() => Alert.alert("Update", "This app is up to date.")}
+          onPress={() =>   Linking.openURL("https://play.google.com/store/apps/details?id=com.custompdfreader&hl=en").catch(() =>
+            Alert.alert("Error", "Unable to open Google Play Store.")
+          )}
         />
       </View>
     </LinearGradient>
