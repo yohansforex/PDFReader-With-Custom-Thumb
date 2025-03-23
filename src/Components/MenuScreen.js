@@ -12,28 +12,33 @@ import {
   Modal,
   Appearance,
   useColorScheme,
+  FlatList,
+  Dimensions,
+  TouchableWithoutFeedback,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import PdfScreen from "./PdfScreen"; // Import your PdfScreen component
 import Menus from "../Others/Menus";
+import Note from "./Note";
+
+const { width } = Dimensions.get("window");
 
 const MenuScreen = () => {
+  const [isNoteVisible, setIsNoteVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showPdfScreen, setShowPdfScreen] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-20)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const [showPdfScreen, setShowPdfScreen] = useState(false); // State to toggle between screens
-
-  // Get the current system color scheme
   const colorScheme = useColorScheme();
 
   // Share function
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: "Share Handhuuraa Ormoo Arsi", // Message to share
-        url: "https://example.com", // Replace with your app's URL or store link
+        message: "Share Handhuuraa Ormoo Arsi",
+        url: "https://example.com",
       });
 
       if (result.action === Share.sharedAction) {
@@ -74,17 +79,79 @@ const MenuScreen = () => {
     setShowModal(true);
   };
 
-  // Toggle between MenuScreen and PdfScreen
   const toggleScreen = () => {
     setShowPdfScreen(!showPdfScreen);
   };
 
-  // Render PdfScreen if showPdfScreen is true
-  if (showPdfScreen) {
-    return <PdfScreen onBack={toggleScreen} />; // Pass the callback function
+  const handleNote = () => {
+    setIsNoteVisible((prev) => !prev);
+  };
+
+  if (isNoteVisible) {
+    return <Note onBack={handleNote} />;
   }
 
-  // Define styles based on the theme
+  if (showPdfScreen) {
+    return <PdfScreen onBack={toggleScreen} />;
+  }
+
+  // Data for cards
+  const cards = [
+    {
+      id: "1",
+      title: "Read The Book",
+      image: require("../../cover.jpg"),
+      onPress: toggleScreen,
+    },
+    {
+      id: "2",
+      title: "Add & Read Notes",
+      image: require("../../notes.jpeg"),
+      onPress: handleNote,
+    },
+    {
+      id: "3",
+      title: "Favorites Qoutes",
+      image: require("../../favorite.png"),
+      onPress: () => Alert.alert("Favorites", "Favorites feature coming soon!"),
+    },
+    {
+      id: "4",
+      title: "Settings",
+      image: require("../../setting.png"),
+      onPress: () => setShowModal(true), // Open the modal
+    },
+  ];
+
+  // Render each card
+  const renderCard = ({ item }) => (
+    <TouchableOpacity onPress={item.onPress}>
+      <View style={styles.card}>
+        <ImageBackground
+          source={item.image}
+          style={styles.cardBackground}
+          resizeMode="cover"
+          imageStyle={{ borderRadius: 20 }}
+        >
+          <View style={styles.spacer} />
+          <Animated.View
+            style={[
+              styles.gradientButton,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
+              },
+            ]}
+          >
+            <LinearGradient colors={["blue", "black", "gray"]} style={styles.gradient}>
+              <Text style={styles.buttonText}>{item.title}</Text>
+            </LinearGradient>
+          </Animated.View>
+        </ImageBackground>
+      </View>
+    </TouchableOpacity>
+  );
+
   const styles = StyleSheet.create({
     closeButton: {
       position: "absolute",
@@ -97,7 +164,7 @@ const MenuScreen = () => {
       backgroundColor: colorScheme === "dark" ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.5)",
     },
     bottomSheet: {
-      height: "73%", // Adjust height dynamically
+      height: "73%",
       backgroundColor: colorScheme === "dark" ? "#121212" : "white",
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
@@ -108,17 +175,9 @@ const MenuScreen = () => {
       justifyContent: "center",
       alignItems: "center",
       width: "100%",
-      height: "100%",
-      backgroundColor: "white",
     },
     header: {
       position: "absolute",
-      borderBottomStartRadius: 25,
-      borderBottomEndRadius: 25,
-      borderTopEndRadius: 25,
-      borderTopStartRadius: 25,
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
       top: 0,
       left: 0,
       right: 0,
@@ -127,29 +186,30 @@ const MenuScreen = () => {
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: 10,
+      zIndex: 1, // Ensure the header is above other components
     },
     menuIcon: {
       marginLeft: 10,
     },
     headerTitle: {
-      fontSize: 20,
+      fontSize: 19,
       fontWeight: "bold",
-      color: colorScheme === "dark" ? "#FFFFFF" : "#FFFFFF",
+      color: "#FFFFFF",
       textAlign: "center",
-      flex: 1, // Ensures the title is centered
+      flex: 1,
     },
     shareIcon: {
       marginRight: 10,
     },
     titleContainer: {
       position: "absolute",
-      top: 60, // Adjusted to avoid overlapping with the header
+      top: 60,
       alignItems: "center",
       width: "100%",
     },
     animatedTitle: {
       marginTop: 20,
-      fontSize: 22,
+      fontSize: 20,
       fontWeight: "bold",
       textAlign: "center",
       color: colorScheme === "dark" ? "#FFFFFF" : "skyblue",
@@ -165,8 +225,8 @@ const MenuScreen = () => {
       marginTop: 60,
     },
     card: {
-      width: "80%",
-      height: 420,
+      width: width * 0.4,
+      height: 200,
       borderRadius: 20,
       overflow: "hidden",
       shadowColor: "#000",
@@ -175,6 +235,7 @@ const MenuScreen = () => {
       shadowRadius: 4,
       elevation: 5,
       backgroundColor: colorScheme === "dark" ? "#333333" : "#FFFFFF",
+      margin: 10,
     },
     cardBackground: {
       flex: 1,
@@ -186,7 +247,7 @@ const MenuScreen = () => {
       flex: 1,
     },
     gradientButton: {
-      width: "80%",
+      width: "90%",
       borderRadius: 20,
       overflow: "hidden",
       shadowColor: "#000",
@@ -202,119 +263,67 @@ const MenuScreen = () => {
       paddingVertical: 10,
       alignItems: "center",
     },
-    button: {
-      width: "100%",
-      alignItems: "center",
-    },
     buttonText: {
-      fontSize: 16,
+      fontSize: 10,
       fontWeight: "bold",
       color: "white",
+    },
+    cardList: {
+      flex: 1,
+      marginTop: 120,
     },
   });
 
   return (
-    <LinearGradient colors={["darkred", "#000000", "#ffffff"]} style={styles.background}>
-      <StatusBar hidden={false} />
-      <LinearGradient colors={["darkred", "black", "lightslategrey"]} style={styles.header}>
-        <View style={styles.header}>
+    <View style={{ flex: 1 }}>
+      <LinearGradient colors={["mediumblue", "dodgerblue", "cornflowerblue"]} style={styles.background}>
+        <StatusBar hidden={false} />
+        {/* Header */}
+        <LinearGradient colors={["navy", "darkblue", "mediumblue"]} style={styles.header}>
           <TouchableOpacity onPress={handleMenu}>
-            <Icons name="menu" size={20} color={colorScheme === "dark" ? "#FFFFFF" : "#FFFFFF"} style={styles.menuIcon} />
+            <Icons name="menu" size={20} color="#FFFFFF" style={styles.menuIcon} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
           <TouchableOpacity onPress={onShare} style={styles.shareIcon}>
-            <Icons name="share-variant-outline" size={20} color={colorScheme === "dark" ? "#FFFFFF" : "#FFFFFF"} />
+            <Icons name="share-variant-outline" size={20} color="#FFFFFF" />
           </TouchableOpacity>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
 
-      {/* Welcome Text ABOVE the Card */}
-      <View style={styles.titleContainer}>
-        <Animated.Text
-          style={[styles.animatedTitle, { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }]}
+        {/* Title Section */}
+        <View style={styles.titleContainer}>
+          <Animated.Text
+            style={[styles.animatedTitle, { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }]}
+          >
+            Welcome to Seenaa Oromoo Uummata Arsii
+          </Animated.Text>
+        </View>
+
+        {/* Card List */}
+        <FlatList
+          data={cards}
+          renderItem={renderCard}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          contentContainerStyle={styles.cardList}
+        />
+
+        {/* Modal */}
+        <Modal
+          visible={showModal}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setShowModal(false)}
         >
-          Welcome to Seenaa Oromoo Uummata Arsii
-        </Animated.Text>
-      </View>
-
-      {/* Card View Below the Welcome Text */}
-      <View style={styles.overlay}>
-        <View style={styles.card}>
-          <ImageBackground
-            source={require("../../cover.jpg")}
-            style={styles.cardBackground}
-            resizeMode="cover"
-            imageStyle={{ borderRadius: 20 }}
-          >
-            {/* Pushes Button Lower */}
-            <View style={styles.spacer} />
-
-            {/* Gradient Button with Animation */}
-            <Animated.View
-              style={[
-                styles.gradientButton,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
-                },
-              ]}
-            >
-              <LinearGradient colors={["blue", "black", "gray"]} style={styles.gradient}>
-                <TouchableOpacity style={styles.button} onPress={toggleScreen}>
-                  <Text style={styles.buttonText}>Open The Book</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </Animated.View>
-          </ImageBackground>
-        </View>
-        <View style={styles.card}>
-          <ImageBackground
-            source={require("../../cover.jpg")}
-            style={styles.cardBackground}
-            resizeMode="cover"
-            imageStyle={{ borderRadius: 20 }}
-          >
-            {/* Pushes Button Lower */}
-            <View style={styles.spacer} />
-
-            {/* Gradient Button with Animation */}
-            <Animated.View
-              style={[
-                styles.gradientButton,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: translateYAnim }, { scale: scaleAnim }],
-                },
-              ]}
-            >
-              <LinearGradient colors={["blue", "black", "gray"]} style={styles.gradient}>
-                <TouchableOpacity style={styles.button} onPress={toggleScreen}>
-                  <Text style={styles.buttonText}>Open The Book</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </Animated.View>
-          </ImageBackground>
-        </View>
-      </View>
-      <Modal
-        visible={showModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowModal(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.bottomSheet}>
-            <Menus />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowModal(false)}
-            >
-              <Icons name="close" size={25} color="#FFFFFF"/>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </LinearGradient>
+          <TouchableWithoutFeedback onPress={() => setShowModal(false)}>
+            <View style={styles.modalContainer}>
+              <View style={styles.bottomSheet}>
+                <Menus />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </LinearGradient>
+    </View>
   );
 };
 

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Share, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Chapter from "./Chapter";
 import Orientation from "react-native-orientation-locker";
+import Note from "../Components/Note"; 
 
 const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
   const [isChapterModalVisible, setChapterModalVisible] = useState(false);
+  const [isNoteVisible, setIsNoteVisible] = useState(false);
 
   // Toggle between portrait and landscape
   const handleOrientation = () => {
@@ -21,18 +23,22 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
   };
 
   const handleChapters = () => {
-    setChapterModalVisible(true); // Show the Chapters modal
+    setChapterModalVisible(true);
   };
 
   const handleChapterSelect = (pageNumber) => {
-    setChapterModalVisible(false); // Close chapter modal
-    onChapterPress(pageNumber); // Navigate to selected page
-    onClose(); // Close Bottom modal as well
+    setChapterModalVisible(false);
+    onChapterPress(pageNumber);
+    onClose();
   };
 
-  const HorizontalScroll = () => {
+  const handleToggleScroll = () => {
     onToggleScroll();
     onClose();
+  };
+
+  const handleNote = () => {
+    setIsNoteVisible((prev) => !prev);
   };
 
   const Card = ({ title, icon, color, onPress }) => (
@@ -46,11 +52,11 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
     <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>
       <View style={styles.grid}>
         <Card title="Chapters" icon="menu-open" color="blue" onPress={handleChapters} />
-        <Card title="Horizontal/Vertical Scroll" icon="gesture-swipe-horizontal" color="blue" onPress={HorizontalScroll} />
+        <Card title="Horizontal/Vertical Scroll" icon="gesture-swipe-horizontal" color="blue" onPress={handleToggleScroll} />
         <Card title="Screen Orientation" icon="screen-rotation" color="blue" onPress={handleOrientation} />
-        <Card title="Author Other Books" icon="book" color="blue" onPress={() => {Alert.alert("Author Other Books", "Coming Soon...")}} />
-        <Card title="Share" icon="share-variant" color="blue" onPress={() => { Share.share({ message: "Share Handhuuraa Ormoo Arsi" }); }} />
-        <Card title="More Apps" icon="apps" color="blue" onPress={() => {Alert.alert("More Apps", "Coming Soon...")}} />
+        <Card title="Write Notes" icon="pen" color="blue" onPress={handleNote} />
+        <Card title="Share" icon="share-variant" color="blue" onPress={() => Share.share({ message: "Share Handhuuraa Ormoo Arsi" })} />
+        <Card title="More Apps" icon="apps" color="blue" onPress={() => Alert.alert("More Apps", "Coming Soon...")} />
       </View>
 
       {/* Chapter Selection Modal */}
@@ -63,6 +69,20 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
             <Chapter onChapterPress={handleChapterSelect} />
+          </View>
+        </View>
+      </Modal>
+
+      {/* Notes Modal */}
+      <Modal
+        visible={isNoteVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleNote}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.bottomSheet}>
+            <Note onBack={handleNote} />
           </View>
         </View>
       </Modal>
@@ -108,10 +128,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   bottomSheet: {
-    height: "40%",
-    backgroundColor: "darkred",
+    height: "80%",
+    backgroundColor: "aliceblue",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 15,
+    padding: 10,
   },
 });

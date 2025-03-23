@@ -5,6 +5,7 @@ import { Slider } from '@react-native-assets/slider';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import Bottom from '../Others/Bottom';
+import Note from './Note';
 
 const PdfScreen = ({ onBack }) => {
   const source = { uri: 'bundle-assets://ormoo.pdf' };
@@ -15,6 +16,7 @@ const PdfScreen = ({ onBack }) => {
   const [isHeaderFooterVisible, setHeaderFooterVisible] = React.useState(true);
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [isHLScroll, setIsHLScroll] = React.useState(false);
+  const [isNoteVisible, setIsNoteVisible] = React.useState(false);
   // Function to reset the inactivity timer
 
   const handlePageSearch = () => {
@@ -26,6 +28,9 @@ const PdfScreen = ({ onBack }) => {
     } else {
       Alert.alert('Invalid Page', 'Please enter a page number between 1 and 544.');
     }
+  };
+  const handleNote = () => {
+    setIsNoteVisible((prev) => !prev);
   };
 
   const onSlidingComplete = (value) => {
@@ -60,6 +65,9 @@ const PdfScreen = ({ onBack }) => {
   const handlePdfMenu = () => {
     setModalVisible(true);
   };
+  if (isNoteVisible) {
+    return <Note onBack={handleNote} />;
+  }
 
   return (
     <View style={{ flex: 1 }}>
