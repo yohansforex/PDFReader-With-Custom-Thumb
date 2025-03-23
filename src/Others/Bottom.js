@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Share, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Share, Alert, TouchableWithoutFeedback } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Chapter from "./Chapter";
 import Orientation from "react-native-orientation-locker";
@@ -64,13 +64,14 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
         visible={isChapterModalVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setChapterModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.bottomSheet}>
-            <Chapter onChapterPress={handleChapterSelect} />
-          </View>
-        </View>
+        onRequestClose={() => setChapterModalVisible(false)}>
+          <TouchableWithoutFeedback onPress={() => setChapterModalVisible(false)}>
+            <View style={styles.modalContainer}>
+              <View style={styles.bottomSheet}>
+                <Chapter onChapterPress={handleChapterSelect} />
+              </View>
+            </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Notes Modal */}
@@ -80,8 +81,8 @@ const Bottom = ({ onChapterPress, onClose, onToggleScroll }) => {
         transparent={true}
         onRequestClose={handleNote}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.bottomSheet}>
+        <View style={styles.NoteContainer}>
+          <View style={styles.NoteSheet}>
             <Note onBack={handleNote} />
           </View>
         </View>
@@ -126,10 +127,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },  
+  NoteContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.19)",
   },
   bottomSheet: {
+    height: "60%",
+    backgroundColor: "gainsboro",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 10,
+  },  
+  NoteSheet: {
     height: "80%",
-    backgroundColor: "aliceblue",
+    backgroundColor: "gainsboro",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 10,

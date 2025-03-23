@@ -186,35 +186,35 @@ const MenuScreen = () => {
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: 10,
-      zIndex: 1, // Ensure the header is above other components
     },
     menuIcon: {
       marginLeft: 10,
     },
     headerTitle: {
-      fontSize: 19,
+      fontSize: 20,
       fontWeight: "bold",
       color: "#FFFFFF",
       textAlign: "center",
-      flex: 1,
+      textShadowOffset: { width: 3, height: 3 },
+      textShadowRadius: 15,
+      textShadowColor: "black",
     },
     shareIcon: {
       marginRight: 10,
     },
     titleContainer: {
-      position: "absolute",
       top: 60,
       alignItems: "center",
       width: "100%",
     },
     animatedTitle: {
-      marginTop: 20,
+      marginTop: 10,
       fontSize: 20,
       fontWeight: "bold",
       textAlign: "center",
-      color: colorScheme === "dark" ? "#FFFFFF" : "skyblue",
+      color: colorScheme === "dark" ? "#FFFFFF" : "white",
       textShadowColor: colorScheme === "dark" ? "#000000" : "#8B0000",
-      textShadowOffset: { width: 1, height: 1 },
+      textShadowOffset: { width: 3, height: 3 },
       textShadowRadius: 10,
     },
     overlay: {
@@ -270,24 +270,24 @@ const MenuScreen = () => {
     },
     cardList: {
       flex: 1,
-      marginTop: 120,
+      marginTop: 50,
     },
   });
 
   return (
     <View style={{ flex: 1 }}>
-      <LinearGradient colors={["mediumblue", "dodgerblue", "cornflowerblue"]} style={styles.background}>
+      <LinearGradient colors={["navy","darkblue","blue","mediumblue", "dodgerblue", "cornflowerblue"]} style={styles.background}>
         <StatusBar hidden={false} />
         {/* Header */}
-        <LinearGradient colors={["navy", "darkblue", "mediumblue"]} style={styles.header}>
-          <TouchableOpacity onPress={handleMenu}>
-            <Icons name="menu" size={20} color="#FFFFFF" style={styles.menuIcon} />
-          </TouchableOpacity>
+        <View style={styles.header}>
+        <TouchableOpacity onPress={handleMenu} activeOpacity={0.7} style={styles.menuIcon}>
+          <Icons name="menu" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
           <Text style={styles.headerTitle}>Handhuuraa Oromo Arsi</Text>
-          <TouchableOpacity onPress={onShare} style={styles.shareIcon}>
-            <Icons name="share-variant-outline" size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-        </LinearGradient>
+        <TouchableOpacity onPress={onShare} activeOpacity={0.7} style={styles.shareIcon}>
+          <Icons name="share-variant-outline" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        </View>
 
         {/* Title Section */}
         <View style={styles.titleContainer}>

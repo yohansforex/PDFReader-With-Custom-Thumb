@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Alert, StatusBar, Modal } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Alert, StatusBar, Modal, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect } from 'react';
 import Pdf from 'react-native-pdf';
 import { Slider } from '@react-native-assets/slider';
@@ -145,18 +145,13 @@ const PdfScreen = ({ onBack }) => {
         animationType="slide"
         transparent={true}
         onRequestClose={() => setModalVisible(false)}
-      >
+      ><TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.bottomSheet}>
             <Bottom onChapterPress={handleChapterPress} onClose={() => setModalVisible(false)} onToggleScroll={handleHorizontalScroll}/>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Icons name="close" size={25} color="white" />
-            </TouchableOpacity>
           </View>
         </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );

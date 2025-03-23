@@ -27,7 +27,7 @@ const Chapter = ({ onChapterPress }) => {
   };
 
   return (
-    <LinearGradient colors={["darkred", "black", "white"]} style={styles.container}>   
+    <View style={styles.container}>   
       <Text style={styles.title}>Boqonnaa filadhu</Text>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {[...Array(10).keys()].map((_, index) => { 
@@ -39,12 +39,12 @@ const Chapter = ({ onChapterPress }) => {
               style={styles.chapterButton}
               onPress={() => handleChapterPress(chapter)}
             >
-              <Text style={styles.chapterButtonText}>Boqonna {chapter}</Text>
+              <Text style={styles.chapterButtonText}>Boqonna {chapter}: </Text>
             </TouchableOpacity>
           );
         })}
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -54,15 +54,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "black",
+    backgroundColor: "white",
     borderRadius: 10,
     alignItems: "center",
+    shadowColor: "black",
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 15,
-    color: "white",
+    marginBottom: 10,
+    color: "black",
   },
   scrollView: {
     width: "100%",
@@ -77,6 +78,6 @@ const styles = StyleSheet.create({
   chapterButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
 });

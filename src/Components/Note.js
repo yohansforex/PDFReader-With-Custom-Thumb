@@ -7,58 +7,55 @@ import {
   View,
   Text,
   Button,
-  TextInput,
   TouchableOpacity,
   Modal,
   Alert,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Note = ({ onBack }) => {
-  const [notes, setNotes] = useState([]); // Initialize as an empty array
+  const [notes, setNotes] = useState([]);
   const [isNoteModalOpen, setNoteModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [searchText, setSearchText] = useState("");
-  const [filteredNotes, setFilteredNotes] = useState([]); // Initialize as an empty array
-  const [selectedColor, setSelectedColor] = useState("#f9f9f9"); // Default color
+  const [filteredNotes, setFilteredNotes] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("#f9f9f9");
+  const [isViewingNote, setIsViewingNote] = useState(false); // New state for viewing
 
-  // Load Notes on Start
   useEffect(() => {
     loadNotes();
   }, []);
 
-  // Save Notes to Storage
   const saveNotes = async (newNotes) => {
     try {
       await AsyncStorage.setItem("notes", JSON.stringify(newNotes));
       setNotes(newNotes);
-      setFilteredNotes(newNotes); // Update filteredNotes as well
+      setFilteredNotes(newNotes);
     } catch (error) {
       Alert.alert("Error", "Failed to save notes.");
     }
   };
 
-  // Load Notes from Storage
   const loadNotes = async () => {
     try {
       const storedNotes = await AsyncStorage.getItem("notes");
       if (storedNotes) {
         const parsedNotes = JSON.parse(storedNotes);
         setNotes(parsedNotes);
-        setFilteredNotes(parsedNotes); // Initialize filteredNotes with loaded notes
+        setFilteredNotes(parsedNotes);
       } else {
-        setNotes([]); // Ensure notes is always an array
-        setFilteredNotes([]); // Ensure filteredNotes is always an array
+        setNotes([]);
+        setFilteredNotes([]);
       }
     } catch (error) {
       Alert.alert("Error", "Failed to load notes.");
     }
   };
 
-  // Save Note
   const onSaveNote = useCallback(() => {
     if (!title || !text) {
       Alert.alert("Missing Information", "Please enter both a title and note.");
@@ -78,24 +75,25 @@ const Note = ({ onBack }) => {
     setSelectedIndex(null);
     setTitle("");
     setText("");
+    setIsViewingNote(false);
   }, [title, text, notes, selectedColor]);
 
-  // Edit Note
   const onNotePress = (index) => {
     setSelectedIndex(index);
     setTitle(notes[index].title);
     setText(notes[index].content);
-    setSelectedColor(notes[index].color || "#f9f9f9"); // Fallback to default color
+    setSelectedColor(notes[index].color || "#f9f9f9");
+    setIsViewingNote(true);
     setNoteModalOpen(true);
   };
 
-  // Delete Note
+  const onEditNote = () => {
+    setIsViewingNote(prevState => !prevState); // Switch to edit mode
+  };
+
   const onDeleteNote = (index) => {
     Alert.alert("Delete Note", "Are you sure you want to delete this note?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
+      { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         onPress: () => {
@@ -106,7 +104,6 @@ const Note = ({ onBack }) => {
     ]);
   };
 
-  // Search Notes
   useEffect(() => {
     if (searchText) {
       setFilteredNotes(
@@ -117,31 +114,29 @@ const Note = ({ onBack }) => {
         )
       );
     } else {
-      setFilteredNotes(notes); // Ensure filteredNotes is always an array
+      setFilteredNotes(notes);
     }
   }, [searchText, notes]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "rebeccapurple", flex: 1 }}>
       <StatusBar />
       <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
-            <Icons name="keyboard-backspace" size={24} color="black" />
+        <TouchableOpacity style={styles.backButton} onPress={onBack}>
+          <Icons name="keyboard-backspace" size={24} color="white" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Add Notes</Text>
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search Note"
+            value={searchText}
+            onChangeText={setSearchText}
+            style={styles.searchInput}
+            placeholderTextColor={"white"}
+          />
+          <TouchableOpacity style={styles.searchButton}>
+            <Icons name="magnify" size={24} color="white" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Add and Read Notes</Text>
-          <View style={styles.searchContainer}>
-            <TextInput
-              placeholder="Search Notes"
-              placeholderTextColor="gray"
-              style={styles.searchInput}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
-            <TouchableOpacity style={styles.searchButton}>
-              <Icons name="magnify" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
 
@@ -163,45 +158,65 @@ const Note = ({ onBack }) => {
       </ScrollView>
 
       <View style={styles.addNoteContainer}>
-        <Button title="Add Note" onPress={() => { setTitle(""); setText(""); setNoteModalOpen(true); }} />
+        <TouchableOpacity 
+          style={styles.floatingButton} 
+          onPress={() => { 
+            setTitle(""); 
+            setText(""); 
+            setIsViewingNote(false); 
+            setNoteModalOpen(true); 
+          }}
+        >
+          <Icons name="plus" size={30} color="white" />
+        </TouchableOpacity>
       </View>
 
-      {/* Note Modal */}
       <Modal visible={isNoteModalOpen} transparent animationType="slide">
         <View style={styles.modalContainer}>
-          <Text style={styles.modalHeading}>Add a Note</Text>
-          <TextInput
-            style={styles.titleInput}
-            placeholder="Enter Title"
-            value={title}
-            onChangeText={setTitle}
-          />
-          <TextInput
-            style={styles.noteInput}
-            placeholder="Enter Note"
-            onChangeText={setText}
-            value={text}
-            multiline
-          />
-          <View style={styles.colorPickerContainer}>
-            <Text>Select Color:</Text>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#ff0000" }]}
-              onPress={() => setSelectedColor("#ff0000")}
-            />
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#00ff00" }]}
-              onPress={() => setSelectedColor("#00ff00")}
-            />
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#0000ff" }]}
-              onPress={() => setSelectedColor("#0000ff")}
-            />
-          </View>
-          <View style={styles.actionButtonContainer}>
-            <Button onPress={onSaveNote} title="Save" />
-            <Button color="red" onPress={() => setNoteModalOpen(false)} title="Cancel" />
-          </View>
+          {isViewingNote ? (
+            <>
+            <View style={{flexDirection: "row", justifyContent: "space-between", alignContent: "center"}}>
+             <TouchableOpacity onPress={() => setNoteModalOpen(false)} style={styles.editButton}>
+                <Icons name="arrow-left" size={25} color="red" />
+             </TouchableOpacity>
+             <TouchableOpacity onPress={onEditNote} style={styles.editButton}>
+                <Icons name="pencil" size={20} color="green" />
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>             
+            </View>
+            
+              <Text style={styles.modalHeading}>{title}</Text>
+              <Text style={styles.viewText}>{text}</Text>
+
+            </>
+          ) : (
+            <>
+            <View style={{flexDirection: "row", justifyContent: "space-between", alignContent: "center"}}>
+
+              <TouchableOpacity style={styles.editButton} onPress={() =>
+              Alert.alert("Discard Note", "Are you sure you want to discard this note?", [
+                { text: "Cancel", style: "cancel" },
+                {
+                  text: "Discard",
+                  onPress: () => {
+                    setNoteModalOpen(false);
+                  },
+                },])}>
+
+                <Icons name="arrow-left" size={25} color="red" />
+                <Text style={{marginHorizontal: 5, color: "red"}}>Discard</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={onSaveNote} style={styles.editButton}>
+                <Icons name="content-save-check" size={25} color="blue" />
+                <Text style={styles.editButtonText}>Save</Text>
+              </TouchableOpacity>
+
+             </View>
+               <TextInput style={styles.titleInput} placeholder="Enter Title" value={title} onChangeText={setTitle} />
+              <TextInput style={styles.noteInput} placeholder="Enter Note" onChangeText={setText} value={text} multiline />
+            </>
+          )}
         </View>
       </Modal>
     </SafeAreaView>
@@ -209,100 +224,69 @@ const Note = ({ onBack }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    height: 60,
+  header: { flexDirection: "row", alignItems: "center", backgroundColor: "rebeccapurple", padding: 10, borderRadius: 20, height: 50 },
+  headerTitle: { fontSize: 18, fontWeight: "bold", color: "white", flex: 1, textAlign: "center" },
+  searchContainer: { flexDirection: "row", alignItems: "center" },
+  searchInput: { backgroundColor: "rebeccapurple", borderRadius: 10, height: 35, color: "white", paddingHorizontal: 10, marginTop: 5 },
+  notesContainer: { padding: 10 },
+  note: { borderWidth: 1, borderColor: "#ddd", padding: 10, marginBottom: 10, borderRadius: 5 },
+  modalContainer: { padding: 20, backgroundColor: "white", borderRadius: 10, height: "100%" },
+  modalHeading: { fontSize: 20, fontWeight: "bold", marginBottom: 10, color: "black" },
+  viewText: { fontSize: 16, marginBottom: 20, color: "black" },
+  editButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f9f9f9",
-    paddingHorizontal: 10,
+    justifyContent: "center",
+    backgroundColor: "transparent", // Transparent background
+    marginBottom: 10, // Space between buttons
   },
-  headerTitle: {
-    fontSize: 18,
+  editButtonText: {
+    color: "green",
+    marginLeft: 5,
     fontWeight: "bold",
-    color: "black",
-    textAlign: "center",
-    flex: 1,
   },
-  headerContent: {
+  cancelButton: {
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  searchInput: {
-    backgroundColor: "#eee",
-    color: "black",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginRight: 10,
-    height: 40,
-    flex: 1,
-  },
-  notesContainer: {
-    padding: 10,
-  },
-  note: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
     marginBottom: 10,
-    borderRadius: 5,
+    backgroundColor: "transparent", // Transparent background
   },
-  noteTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  noteContent: {
-    fontSize: 14,
-    color: "gray",
-  },
-  addNoteContainer: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-  },
-  modalContainer: {
-    padding: 20,
-    backgroundColor: "white",
-    margin: 20,
-    borderRadius: 10,
-  },
-  modalHeading: {
-    fontSize: 20,
+  cancelButtonText: {
+    color: "red",
+    marginLeft: 5,
     fontWeight: "bold",
   },
   titleInput: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    marginVertical: 10,
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 20, // Larger font size
+    fontWeight: "bold", // Bold text
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 10,
+    padding: 5,
   },
   noteInput: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    minHeight: 100,
-    marginVertical: 10,
+    fontSize: 16, // Slightly smaller font size
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    padding: 5,
+    flexWrap: "wrap",
   },
-  colorPickerContainer: {
-    flexDirection: "row",
+  floatingButton: {
+    position: "absolute",
+    bottom: 20, // Floating from bottom
+    right: 20, // Floating from right
+    backgroundColor: "purple", // Button color
+    width: 60, // Circular button size
+    height: 60, // Circular button size
+    borderRadius: 50, // Makes it round
+    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 10,
-  },
-  colorButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginHorizontal: 5,
-  },
-  actionButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5, // Shadow for Android
   },
 });
 
